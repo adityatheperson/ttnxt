@@ -64,7 +64,6 @@ class Game:
 
 class Gamescreen:
     def __init__(self):
-        pygame.init()
         self.surface = pygame.display.set_mode((660, 510))
         pygame.display.set_caption('TTNXT')
 
@@ -98,17 +97,20 @@ class Gamescreen:
         pygame.display.flip()
 
 
-
     def run_game_loop(self):
         while True:  # main game loop
             for event in pygame.event.get():
-                if event.type == KEYDOWN:
+                if event.type == REFRESHTIMER:
                     self.draw_screen()
                     pygame.display.update()
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
 
+
+pygame.init()
+REFRESHTIMER = pygame.USEREVENT
+pygame.time.set_timer(REFRESHTIMER, 1000)
 
 screen = Gamescreen()
 screen.run_game_loop()
