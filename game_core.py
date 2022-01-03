@@ -35,9 +35,7 @@ class Position:
 class Game:
 
     def __init__(self):
-        self.board = [[0, 0, 0],
-                      [0, 0, 0],
-                      [0, 0, 0]]
+        self.board = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.player_turn = 1
 
     def get_board(self):
@@ -46,14 +44,13 @@ class Game:
     def get_player_turn(self):
         return self.player_turn
 
-    def get_pos(self, posx, posy):
-        return self.board[posx][posy]
+    def get_pos(self, location: Location):
+        return self.board[location.value]
+        # return self.board[posx][posy]
 
-    def validate_point(self, point: Position):
-        possible_points = [0, 1, 2]
-        if point.x not in possible_points:
-            return False
-        if point.y not in possible_points:
+    def validate_point(self, location: Location):
+        possible_points = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        if location.value not in possible_points:
             return False
         return True
 
@@ -113,24 +110,24 @@ class Game:
             if startpointy <= mouseposy <= startpointy + 50:
                 return Location.BOTTOMRIGHT
 
-    def move_piece(self, player: Playertype, frompos: Position, topos: Position):
-        if not self.validate_point(frompos) or not self.validate_point(topos):
+    def move_piece(self, player: Playertype, fromlos: Location, tolos: Location):
+        if not self.validate_point(tolos) or not self.validate_point(fromlos):
             return Errors.POINTDOESNOTEXIST
-        if self.get_pos(frompos.x, frompos.y) == 0:
+        if self.get_pos(fromlos) == 0:
             return Errors.NOPAWNSELECTED
-        if self.get_pos(topos.x, topos.y) != 0:
+        if self.get_pos(tolos) != 0:
             return Errors.ALREADYPAWNTHERE
-        if frompos.x == topos.x and frompos.y == topos.y:
+        if tolos == fromlos:
             return Errors.SAMEPOINT
-        if player != self.get_pos(frompos.x, frompos.y):
+        if player != self.get_pos(fromlos):
             return Errors.OPPOSITEPAWN
-        self.board[topos.x][topos.y] = player
+        self.board[tolos.value] = player
         return True
 
-    def place_piece(self, player: Playertype, topos: Position):
-        if not self.validate_point(topos):
+    def place_piece(self, player: Playertype, tolos: Location):
+        if not self.validate_point(tolos):
             return Errors.POINTDOESNOTEXIST
-        if self.get_pos(topos.x, topos.y) != 0:
+        if self.get_pos(tolos) != 0:
             return Errors.ALREADYPAWNTHERE
-        self.board[topos.x][topos.y] = player
+        self.board[tolos.value] = player
         return True

@@ -3,7 +3,7 @@ import sys
 import pygame
 from pygame import KEYDOWN, QUIT
 
-from game_core import Position, Game, Location
+from game_core import Position, Game, Location, Playertype
 
 
 class Gamescreen:
@@ -14,8 +14,8 @@ class Gamescreen:
         pygame.display.set_caption('TTNXT')
         pygame.time.set_timer(pygame.USEREVENT, 100)
 
-    def draw_circle(self, player, location: Location):
-        if player == 1:
+    def draw_circle(self, player : Playertype, location: Location):
+        if player == Playertype.PLAYER1:
             if location == Location.TOPLEFT:
                 pygame.draw.circle(self.surface, (255, 0, 0), (30, 30), 15, 15)
                 pygame.display.update()
@@ -44,7 +44,7 @@ class Gamescreen:
                 pygame.draw.circle(self.surface, (255, 0, 0), (630, 480), 15, 15)
                 pygame.display.update()
 
-        if player == 2:
+        if player == Playertype.PLAYER2:
             if location == Location.TOPLEFT:
                 pygame.draw.circle(self.surface, (0, 0, 255), (30, 30), 15, 15)
                 pygame.display.update()
