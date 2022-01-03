@@ -14,6 +14,18 @@ class Errors(Enum):
     SAMEPOINT = 4
 
 
+class Location(Enum):
+    TOPLEFT = 0
+    TOPCENTER = 1
+    TOPRIGHT = 2
+    MIDDLELEFT = 3
+    MIDDLECENTER = 4
+    MIDDLELRIGHT = 5
+    BOTTOMLEFT = 6
+    BOTTOMCENTER = 7
+    BOTTOMRIGHT = 8
+
+
 class Position:
     def __init__(self, x=0, y=0):
         self.x = x
@@ -45,6 +57,62 @@ class Game:
             return False
         return True
 
+    def check_if_nearby(self, mouseposx, mouseposy):
+        marginoferror = 50
+
+        startpointx = 30 - marginoferror / 2
+        startpointy = 30 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.TOPLEFT
+        startpointx = 330 - marginoferror / 2
+        startpointy = 30 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.TOPCENTER
+
+        startpointx = 630 - marginoferror / 2
+        startpointy = 30 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.TOPRIGHT
+
+        startpointx = 30 - marginoferror / 2
+        startpointy = 255 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.MIDDLELEFT
+
+        startpointx = 330 - marginoferror / 2
+        startpointy = 255 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.MIDDLECENTER
+
+        startpointx = 630 - marginoferror / 2
+        startpointy = 255 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.MIDDLELRIGHT
+
+        startpointx = 30 - marginoferror / 2
+        startpointy = 480 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.BOTTOMLEFT
+
+        startpointx = 330 - marginoferror / 2
+        startpointy = 480 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.BOTTOMCENTER
+
+        startpointx = 630 - marginoferror / 2
+        startpointy = 480 - marginoferror / 2
+        if startpointx <= mouseposx <= startpointx + 50:
+            if startpointy <= mouseposy <= startpointy + 50:
+                return Location.BOTTOMRIGHT
+
     def move_piece(self, player: Playertype, frompos: Position, topos: Position):
         if not self.validate_point(frompos) or not self.validate_point(topos):
             return Errors.POINTDOESNOTEXIST
@@ -56,5 +124,13 @@ class Game:
             return Errors.SAMEPOINT
         if player != self.get_pos(frompos.x, frompos.y):
             return Errors.OPPOSITEPAWN
+        self.board[topos.x][topos.y] = player
+        return True
+
+    def place_piece(self, player: Playertype, topos: Position):
+        if not self.validate_point(topos):
+            return Errors.POINTDOESNOTEXIST
+        if self.get_pos(topos.x, topos.y) != 0:
+            return Errors.ALREADYPAWNTHERE
         self.board[topos.x][topos.y] = player
         return True
