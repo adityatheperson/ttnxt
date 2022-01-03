@@ -93,8 +93,6 @@ class Gamescreen:
     def run_game_loop(self):
         while True:  # main game loop
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.draw_circle(1, self.game.check_if_nearby(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
                 if event.type == pygame.USEREVENT:
                     self.draw_screen()
                     pygame.display.update()
