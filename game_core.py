@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Playertype(Enum):
+    NOPLAYER = 0
     PLAYER1 = 1
     PLAYER2 = 2
 
@@ -37,6 +38,8 @@ class Game:
     def __init__(self):
         self.board = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.player_turn = 1
+        self.pawns_placed = 0
+        self.pawn_selected = None
 
     def get_board(self):
         return self.board
@@ -122,12 +125,15 @@ class Game:
         if player != self.get_pos(fromlos):
             return Errors.OPPOSITEPAWN
         self.board[tolos.value] = player
+        self.board[fromlos.value] = 0
+
         return True
 
     def place_piece(self, player: Playertype, tolos: Location):
         if not self.validate_point(tolos):
-            return Errors.POINTDOESNOTEXIST
+            return False
         if self.get_pos(tolos) != 0:
-            return Errors.ALREADYPAWNTHERE
+            return False
         self.board[tolos.value] = player
+
         return True
