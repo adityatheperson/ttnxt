@@ -1,5 +1,7 @@
 from enum import Enum
 
+import chime
+
 
 class Playertype(Enum):
     NOPLAYER = 0
@@ -56,6 +58,41 @@ class Game:
         if location.value not in possible_points:
             return False
         return True
+
+    def check_if_won(self, player : Playertype, list):
+        if list[0] == player and list[1] == player and list[2] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[3] == player and list[4] == player and list[5] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[6] == player and list[7] == player and list[8] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[0] == player and list[3] == player and list[6] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[1] == player and list[4] == player and list[7] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[2] == player and list[5] == player and list[8] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[0] == player and list[4] == player and list[8] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        if list[2] == player and list[4] == player and list[6] == player:
+            chime.theme('zelda')
+            chime.success()
+            return True
+        return False
 
     def check_if_nearby(self, mouseposx, mouseposy):
         marginoferror = 50
@@ -120,7 +157,7 @@ class Game:
             return Errors.NOPAWNSELECTED
         if self.get_pos(tolos) != 0:
             return Errors.ALREADYPAWNTHERE
-        if tolos == fromlos:
+        if tolos.value == fromlos.value:
             return Errors.SAMEPOINT
         if player != self.get_pos(fromlos):
             return Errors.OPPOSITEPAWN

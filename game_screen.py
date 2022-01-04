@@ -20,6 +20,8 @@ class Gamescreen:
         chime.theme('mario')
 
         self.next_turn = Playertype.PLAYER1
+        self.game_won = False
+        self.game_winner = 0
 
     def draw_pawn(self, player: Playertype, location: Location):
         if player == Playertype.PLAYER1:
@@ -82,7 +84,6 @@ class Gamescreen:
         pygame.draw.line(self.surface, (0, 0, 0), (30, 480), (630, 480), 5)
         pygame.draw.line(self.surface, (0, 0, 0), (630, 480), (630, 30), 5)
         dialogue = dialogue_font.render("", True, (0, 0, 0))
-
         actor = self.next_turn.name
         if self.game.pawns_placed == 0:
             dialogue = dialogue_font.render(f"{actor} - Place a point to start the game", True, (0, 0, 0))
@@ -93,6 +94,10 @@ class Gamescreen:
                 dialogue = dialogue_font.render(f"{actor} - Select a Pawn to Move", True, (0, 0, 0))
             else:
                 dialogue = dialogue_font.render(f"{actor} - Select a Empty Space to Move your pawn", True, (0, 0, 0))
+        if self.game_won and self.game_winner == 1:
+            dialogue = dialogue_font.render("PLAYER 1 YOU WON!!!", True, RED)
+        if self.game_won and self.game_winner == 2:
+            dialogue = dialogue_font.render("PLAYER 2 YOU WON!!!", True, BLUE)
 
         self.surface.blit(dialogue, (50, 550))
 
@@ -102,9 +107,20 @@ class Gamescreen:
         while True:  # main game loop
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONUP:
-                    click_location = self.game.check_if_nearby(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-                    if click_location is not None:
-                        self.play_turn(click_location)
+                    if not self.game_won:
+                        click_location = self.game.check_if_nearby(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+                        if click_location is not None:
+                            self.play_turn(click_location)
+                            if self.game.check_if_won(Playertype.PLAYER1, self.game.board):
+                                self.game_won = True
+                                self.game_winner = 1
+                            if self.game.check_if_won(Playertype.PLAYER2, self.game.board):
+                                self.game_won = True
+                                self.game_winner = 2
+                            self.draw_screen()
+                            pygame.display.update()
+
+                    else:
                         self.draw_screen()
                         pygame.display.update()
 
