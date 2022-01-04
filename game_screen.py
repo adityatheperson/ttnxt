@@ -2,7 +2,7 @@ import sys
 import chime
 
 import pygame
-from pygame import KEYDOWN, QUIT, mixer
+from pygame import KEYDOWN, QUIT
 
 from game_core import Position, Game, Location, Playertype
 
