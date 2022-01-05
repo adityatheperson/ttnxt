@@ -45,7 +45,7 @@ class Gamescreen:
         if location == Location.MIDDLECENTER:
             pygame.draw.circle(self.surface, rgb, (330, 255), 15, 15)
             pygame.display.update()
-        if location == Location.MIDDLELRIGHT:
+        if location == Location.MIDDLERIGHT:
             pygame.draw.circle(self.surface, rgb, (630, 255), 15, 15)
             pygame.display.update()
         if location == Location.BOTTOMLEFT:
@@ -141,9 +141,13 @@ class Gamescreen:
                 else:
                     self.beep_error()
             else:
-                if self.game.move_piece(self.next_turn, self.game.pawn_selected, click_location):
-                    self.game.pawn_selected = None
-                    self.switch_player()
+                if click_location in self.game.check_possible_moves(self.game.pawn_selected):
+                    if self.game.move_piece(self.next_turn, self.game.pawn_selected, click_location):
+
+                        self.game.pawn_selected = None
+                        self.switch_player()
+                else:
+                    chime.warning()
 
     def beep_error(self):
         chime.warning()

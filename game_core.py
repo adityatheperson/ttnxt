@@ -23,7 +23,7 @@ class Location(Enum):
     TOPRIGHT = 2
     MIDDLELEFT = 3
     MIDDLECENTER = 4
-    MIDDLELRIGHT = 5
+    MIDDLERIGHT = 5
     BOTTOMLEFT = 6
     BOTTOMCENTER = 7
     BOTTOMRIGHT = 8
@@ -93,7 +93,26 @@ class Game:
             chime.success()
             return True
         return False
-
+    def check_possible_moves(self, location : Location):
+        if location == Location.TOPLEFT:
+            return[Location.TOPCENTER, Location.MIDDLECENTER, Location.MIDDLELEFT]
+        if location == Location.TOPCENTER:
+            return[Location.TOPLEFT, Location.MIDDLECENTER, Location.TOPRIGHT]
+        if location == Location.TOPRIGHT:
+            return[Location.TOPCENTER, Location.MIDDLECENTER, Location.MIDDLERIGHT]
+        if location == Location.MIDDLELEFT:
+            return[Location.TOPLEFT, Location.MIDDLECENTER, Location.BOTTOMLEFT]
+        if location == Location.MIDDLECENTER:
+            return[Location.TOPLEFT, Location.TOPCENTER, Location.TOPRIGHT, Location.MIDDLELEFT, Location.MIDDLECENTER, Location.MIDDLERIGHT, Location. BOTTOMLEFT, Location.BOTTOMCENTER, Location.BOTTOMRIGHT]
+        if location == Location.MIDDLERIGHT:
+            return[Location.TOPRIGHT, Location.MIDDLECENTER, Location.BOTTOMRIGHT]
+        if location == Location.BOTTOMLEFT:
+            return[Location.MIDDLELEFT, Location.MIDDLECENTER, Location.BOTTOMCENTER]
+        if location == Location.BOTTOMCENTER:
+            return[Location.BOTTOMLEFT, Location.MIDDLECENTER, Location.BOTTOMRIGHT]
+        if location == Location.BOTTOMLEFT:
+            return[Location.BOTTOMCENTER, Location.MIDDLECENTER, Location.MIDDLERIGHT]
+        return False
     def check_if_nearby(self, mouseposx, mouseposy):
         marginoferror = 50
 
@@ -130,7 +149,7 @@ class Game:
         startpointy = 255 - marginoferror / 2
         if startpointx <= mouseposx <= startpointx + 50:
             if startpointy <= mouseposy <= startpointy + 50:
-                return Location.MIDDLELRIGHT
+                return Location.MIDDLERIGHT
 
         startpointx = 30 - marginoferror / 2
         startpointy = 480 - marginoferror / 2
