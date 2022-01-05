@@ -93,13 +93,14 @@ class Gamescreen:
             if self.game.pawn_selected is None:
                 dialogue = dialogue_font.render(f"{actor} - Select a Pawn to Move", True, (0, 0, 0))
             else:
-                dialogue = dialogue_font.render(f"{actor} - Select a Empty Space to Move your pawn", True, (0, 0, 0))
+                dialogue = dialogue_font.render(
+                    f"{actor} - Select a Empty Space to Move your pawn OR click on point to unselect", True, (0, 0, 0))
         if self.game_won and self.game_winner == 1:
             dialogue = dialogue_font.render("PLAYER 1 YOU WON!!!", True, RED)
         if self.game_won and self.game_winner == 2:
             dialogue = dialogue_font.render("PLAYER 2 YOU WON!!!", True, BLUE)
 
-        self.surface.blit(dialogue, (50, 550))
+        self.surface.blit(dialogue, (30, 550))
 
     def run_game_loop(self):
         self.draw_screen()
@@ -141,13 +142,15 @@ class Gamescreen:
                 else:
                     self.beep_error()
             else:
-                if click_location in self.game.check_possible_moves(self.game.pawn_selected):
-                    if self.game.move_piece(self.next_turn, self.game.pawn_selected, click_location):
-
-                        self.game.pawn_selected = None
-                        self.switch_player()
+                if not click_location == self.game.pawn_selected:
+                    if click_location in self.game.check_possible_moves(self.game.pawn_selected):
+                        if self.game.move_piece(self.next_turn, self.game.pawn_selected, click_location) == True:
+                            self.game.pawn_selected = None
+                            self.switch_player()
+                    else:
+                        chime.warning()
                 else:
-                    chime.warning()
+                    self.game.pawn_selected = None
 
     def beep_error(self):
         chime.warning()

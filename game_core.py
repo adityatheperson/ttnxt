@@ -103,14 +103,14 @@ class Game:
         if location == Location.MIDDLELEFT:
             return[Location.TOPLEFT, Location.MIDDLECENTER, Location.BOTTOMLEFT]
         if location == Location.MIDDLECENTER:
-            return[Location.TOPLEFT, Location.TOPCENTER, Location.TOPRIGHT, Location.MIDDLELEFT, Location.MIDDLECENTER, Location.MIDDLERIGHT, Location. BOTTOMLEFT, Location.BOTTOMCENTER, Location.BOTTOMRIGHT]
+            return[Location.TOPLEFT, Location.TOPCENTER, Location.TOPRIGHT, Location.MIDDLELEFT, Location.MIDDLERIGHT, Location. BOTTOMLEFT, Location.BOTTOMCENTER, Location.BOTTOMRIGHT]
         if location == Location.MIDDLERIGHT:
             return[Location.TOPRIGHT, Location.MIDDLECENTER, Location.BOTTOMRIGHT]
         if location == Location.BOTTOMLEFT:
             return[Location.MIDDLELEFT, Location.MIDDLECENTER, Location.BOTTOMCENTER]
         if location == Location.BOTTOMCENTER:
             return[Location.BOTTOMLEFT, Location.MIDDLECENTER, Location.BOTTOMRIGHT]
-        if location == Location.BOTTOMLEFT:
+        if location == Location.BOTTOMRIGHT:
             return[Location.BOTTOMCENTER, Location.MIDDLECENTER, Location.MIDDLERIGHT]
         return False
     def check_if_nearby(self, mouseposx, mouseposy):
