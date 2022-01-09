@@ -1,5 +1,4 @@
 from enum import Enum
-
 import chime
 
 
@@ -171,14 +170,23 @@ class Game:
 
     def move_piece(self, player: Playertype, fromlos: Location, tolos: Location):
         if not self.validate_point(tolos) or not self.validate_point(fromlos):
+
             return Errors.POINTDOESNOTEXIST
         if self.get_pos(fromlos) == 0:
+            chime.theme('mario')
+            chime.warning()
             return Errors.NOPAWNSELECTED
         if self.get_pos(tolos) != 0:
+            chime.theme('mario')
+            chime.warning()
             return Errors.ALREADYPAWNTHERE
         if tolos.value == fromlos.value:
+            chime.theme('mario')
+            chime.warning()
             return Errors.SAMEPOINT
         if player != self.get_pos(fromlos):
+            chime.theme('mario')
+            chime.warning()
             return Errors.OPPOSITEPAWN
         self.board[tolos.value] = player
         self.board[fromlos.value] = 0

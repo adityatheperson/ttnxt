@@ -1,4 +1,4 @@
-from game_core import  Game, Location, Playertype
+from game_core import Game, Location, Playertype
 from game_screen import Gamescreen
 
 game = Game()

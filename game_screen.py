@@ -22,6 +22,7 @@ class Gamescreen:
         self.next_turn = Playertype.PLAYER1
         self.game_won = False
         self.game_winner = 0
+        self.game_mode = None
 
     def draw_pawn(self, player: Playertype, location: Location):
         if player == Playertype.PLAYER1:
@@ -58,6 +59,14 @@ class Gamescreen:
             pygame.draw.circle(self.surface, rgb, (630, 480), 15, 15)
             pygame.display.update()
 
+    def draw_starting_screen(self):
+        self.surface.fill((255, 255, 255))
+        dialogue_font = pygame.font.SysFont('arial', 40)
+        dialogue = dialogue_font.render("Press 1 for Single Player", True, BLUE)
+        dialogue2 = dialogue_font.render("Press 2 for Multiplayer ", True, RED)
+        self.surface.blit(dialogue, (120, 100))
+        self.surface.blit(dialogue2, (130, 350))
+
     def draw_screen(self):
 
         self.draw_background()
@@ -74,6 +83,7 @@ class Gamescreen:
 
     def draw_background(self):
         dialogue_font = pygame.font.SysFont('arial', 20)
+        dialogue_font2 = pygame.font.SysFont('arial', 15)
         self.surface.fill((255, 255, 255))
         pygame.draw.line(self.surface, (0, 0, 0), (330, 30), (330, 480), 5)
         pygame.draw.line(self.surface, (0, 0, 0), (30, 30), (630, 480), 5)
@@ -93,7 +103,7 @@ class Gamescreen:
             if self.game.pawn_selected is None:
                 dialogue = dialogue_font.render(f"{actor} - Select a Pawn to Move", True, (0, 0, 0))
             else:
-                dialogue = dialogue_font.render(
+                dialogue = dialogue_font2.render(
                     f"{actor} - Select a Empty Space to Move your pawn OR click on point to unselect", True, (0, 0, 0))
         if self.game_won and self.game_winner == 1:
             dialogue = dialogue_font.render("PLAYER 1 YOU WON!!!", True, RED)
@@ -103,31 +113,48 @@ class Gamescreen:
         self.surface.blit(dialogue, (30, 550))
 
     def run_game_loop(self):
-        self.draw_screen()
-        pygame.display.update()
-        while True:  # main game loop
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONUP:
-                    if not self.game_won:
-                        click_location = self.game.check_if_nearby(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-                        if click_location is not None:
-                            self.play_turn(click_location)
-                            if self.game.check_if_won(Playertype.PLAYER1, self.game.board):
-                                self.game_won = True
-                                self.game_winner = 1
-                            if self.game.check_if_won(Playertype.PLAYER2, self.game.board):
-                                self.game_won = True
-                                self.game_winner = 2
+        while self.game_mode is None:
+            self.draw_starting_screen()
+            pygame.display.update()
+            while self.game_mode is None:  # main game loop
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_1:
+                            self.game_mode = 1
+                        else:
+                            if event.key == pygame.K_2:
+                                self.game_mode = 2
+
+        if self.game_mode == 2:
+            self.draw_screen()
+            pygame.display.update()
+            while True:  # main game loop
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if not self.game_won:
+                            click_location = self.game.check_if_nearby(pygame.mouse.get_pos()[0],
+                                                                       pygame.mouse.get_pos()[1])
+                            if click_location is not None:
+                                self.play_turn(click_location)
+                                if self.game.check_if_won(Playertype.PLAYER1, self.game.board):
+                                    self.game_won = True
+                                    self.game_winner = 1
+                                if self.game.check_if_won(Playertype.PLAYER2, self.game.board):
+                                    self.game_won = True
+                                    self.game_winner = 2
+                                self.draw_screen()
+                                pygame.display.update()
+                        else:
                             self.draw_screen()
                             pygame.display.update()
-
-                    else:
-                        self.draw_screen()
-                        pygame.display.update()
-
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
+        if self.game_mode == 2:
+            print("hoi")
 
     def play_turn(self, click_location):
         # Check if it is place or move
